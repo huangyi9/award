@@ -1,0 +1,69 @@
+<view  wx:if="{{!hasUserInfo && canIUse}}">
+  <view class='shouquan'>
+    <image src='/image/zhuanpan.png'></image>
+    <text class='text1'>这是一款抽奖小程序，用户每天可以免费来抽奖碰碰运气。</text>
+    <text class='text2'>需要授权才能完整使用本程序。</text>
+    <button class='btn' open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权登录</button>
+  </view>
+</view>
+<view wx:else class="wrapper" >
+  <view class="main" style='transform:scale({{scale}});margin:0 auto;'>
+    <view class='userinfo'>
+      <view class='userinfo-tx'>
+        <image bindtap='goToList' src='{{userInfo.avatarUrl}}'></image>
+        <view class='userinfo-money'><text>{{money}}元</text></view>
+      </view>
+
+    </view>
+    <view class="canvas-container" style='margin:0 auto;'>
+      <view animation="{{animationData}}" class="canvas-content" style='margin:0 auto;'>
+        <canvas style="width: 300px; height: 300px; margin:0 auto;" class="canvas-element" canvas-id="lotteryCanvas"></canvas>
+        <view class="canvas-line">
+          <view class="canvas-litem" wx:for="{{awardsList}}" wx:key="unique" style="-webkit-transform: rotate({{item.lineTurn}});transform: rotate({{item.lineTurn}})"></view>
+        </view>
+         <view class="canvas-list">
+          <view class="canvas-item" wx:for="{{awardsList}}" wx:key="unique">
+            <view class="canvas-item-text" style="-webkit-transform: rotate({{item.turn}});transform: rotate({{item.turn}})">
+              <text class='canvas-item-text-inner {{scale===1.4?"btnfont":"normal"}}'> {{item.award}}</text>
+            </view>
+          </view>
+        </view>  
+      </view>
+       <view class="{{scale===1.4?'btnfont':'normal'}} canvas-btn {{turning?disabled:able}} {{chanceRemain==0?disabled:able}}"></view> 
+    </view>
+    <view class='count'><text>{{count}}</text>钻</view>
+    <view class="main-container">
+      <button class="main-container-btn {{turning?disabled:able}}" bindtap="{{turning?'':'getLottery'}}">抽 奖</button>
+    </view>
+    <view class='tishi'>
+      每次抽奖消耗5钻石，每10分钟会增加10钻石
+    </view>
+  </view>
+</view>
+<popup show="{{ isShare }}" bindclose="togglePopup">
+  <view class='share'>
+    <view class='share-head'>邀请大家可获得钻石</view>
+    <view class='share-foot'>
+      <view class='share-foot-text'>好东西要分享给大家哦</view>
+      <button open-type='share' class='share-middle'>分享</button>
+    </view> 
+  </view>
+</popup>
+<popup show="{{ isHongbao }}" bindclose="togglePopup2">
+  <view class='share'>
+    <view class='share-head'>抽到随机红包</view>
+    <view class='share-foot'>
+      <view class='share-foot-text'></view>
+      <button bindtap='goToHongBao' class='share-middle'>開</button>
+    </view> 
+  </view>
+</popup>
+<popup show="{{ isMini }}" bindclose="togglePopup3">
+  <view class='share3'>
+    <view class='share-head3'></view>
+    <view class='share-foot'>
+      <view class='share-foot-text3'>休息一下，玩玩小程序吧</view>
+      <button bindtap='goToMini' class='share-middle'>玩</button>
+    </view> 
+  </view>
+</popup>
